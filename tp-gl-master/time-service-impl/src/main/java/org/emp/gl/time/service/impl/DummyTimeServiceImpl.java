@@ -4,7 +4,8 @@
  * and open the template in the editor.
  */
 package org.emp.gl.time.service.impl;
-
+import java.beans.PropertyChangeSupport;
+import java.beans.PropertyChangeSupport;
 import java.time.LocalTime;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class DummyTimeServiceImpl
     int minutes;
     int secondes;
     int heures;
-    List<TimerChangeListener> listeners = new LinkedList<>();
+    PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
     /**
      * Constructeur du DummyTimeServiceImpl: ici, 
@@ -59,92 +60,96 @@ public class DummyTimeServiceImpl
 
     @Override
     public void addTimeChangeListener(TimerChangeListener pl) {
-        // TODO
-        listeners.add(pl) ;
+        pcs.addPropertyChangeListener(pl);
     }
 
     @Override
     public void removeTimeChangeListener(TimerChangeListener pl) {
-        // TODO
-        listeners.remove(pl) ;
+        pcs.removePropertyChangeListener(pl);
     }
 
     private void timeChanged() {
         setTimeValues();
     }
 
+
+
+
     public void setDixiemeDeSeconde(int newDixiemeDeSeconde) {
         if (dixiemeDeSeconde == newDixiemeDeSeconde)
             return;
 
-        int oldValue = dixiemeDeSeconde;
+        int old = dixiemeDeSeconde;
         dixiemeDeSeconde = newDixiemeDeSeconde;
+        pcs.firePropertyChange(TimerChangeListener.DIXEME_DE_SECONDE_PROP, old, dixiemeDeSeconde);
 
-        // informer les listeners !
-        dixiemeDeSecondesChanged(oldValue, dixiemeDeSeconde);
+
     }
+    //On a pas besoin de ça anymore  avec PropertyChangeSupport
 
-    private void dixiemeDeSecondesChanged(int oldValue, int newValue) {
+   /*  private void dixiemeDeSecondesChanged(int oldValue, int newValue) {
        for (TimerChangeListener l : listeners) {
            l.propertyChange(TimerChangeListener.DIXEME_DE_SECONDE_PROP,
                    oldValue, dixiemeDeSeconde);
        }
     }
-
-
-    public void setSecondes(int newSecondes) {
-        if (secondes == newSecondes)
-            return;
-
-        int oldValue = secondes;
-        secondes = newSecondes;
-
-        secondesChanged(oldValue, secondes);
-    }
-
-    private void secondesChanged(int oldValue, int secondes) {
+        private void secondesChanged(int oldValue, int secondes) {
 
        for (TimerChangeListener l : listeners) {
            l.propertyChange(TimerChangeListener.SECONDE_PROP,
                    oldValue, secondes);
        }
     }
-
-
-    public void setMinutes(int newMinutes) {
-        if (minutes == newMinutes)
-            return;
-
-        int oldValue = minutes;
-        minutes = newMinutes;
-
-        minutesChanged (oldValue, minutes) ;
-    }
-
+       
     private void minutesChanged(int oldValue, int minutes) {
        for (TimerChangeListener l : listeners) {
            l.propertyChange(TimerChangeListener.MINUTE_PROP,
                    oldValue, secondes);
        }
     }
-
-    public void setHeures(int newHeures) {
-        if (heures == newHeures)
-            return;
-
-        int oldValue = heures;
-        heures = newHeures;
-
-        heuresChanged (oldValue, heures) ;
-    }
-
-    private void heuresChanged(int oldValue, int heures) {
+         private void heuresChanged(int oldValue, int heures) {
        for (TimerChangeListener l : listeners) {
            l.propertyChange(TimerChangeListener.HEURE_PROP,
                    oldValue, secondes);
        }
     }
 
+ */
+
+    public void setSecondes(int newSecondes) {
+        if (secondes == newSecondes)
+            return;
+
+        int old = secondes;
+        secondes = newSecondes;
+
+        pcs.firePropertyChange(TimerChangeListener.SECONDE_PROP, old, secondes);    }
+
+   
+
+
+    public void setMinutes(int newMinutes) {
+        if (minutes == newMinutes)
+            return;
+
+        int old = minutes;
+        minutes = newMinutes;
+
+        pcs.firePropertyChange(TimerChangeListener.MINUTE_PROP, old, minutes);
+    }
+
+
+    public void setHeures(int newHeures) {
+        if (heures == newHeures)
+            return;
+
+        int old = heures;
+        heures = newHeures;
+
+        pcs.firePropertyChange(TimerChangeListener.HEURE_PROP, old, heures);
+    }
+
+  
 
     @Override
     public int getDixiemeDeSeconde() {
