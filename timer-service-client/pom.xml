@@ -20,7 +20,11 @@
             <artifactId>timer-service</artifactId>
             <version>0.0.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.emp.gl</groupId>
+            <artifactId>look-up</artifactId>
+             <version>0.0.1</version>
+        </dependency>
         <!-- Dépendance vers le module time-service-impl (obligatoire pour DummyTimeServiceImpl) -->
         <dependency>
             <groupId>org.emp.gl</groupId>
